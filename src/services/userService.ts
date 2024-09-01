@@ -1,48 +1,40 @@
 // I will get users from DB in this file
 import prisma from "../prisma/client";
 
-export interface User {
+export interface Guest {
 	id: number;
 	name: string;
-	email: string;
-	createdAt: Date;
-	updatedAt: Date;
+	willAttend: Boolean | null;
+	dietaryRestrictions: String[] | undefined;
+	music: String[] | undefined;
+}
+
+export interface Invitation {
+	id: number;
+	invitedGuests: Guest[];
+	confirmedGuest: Guest[];
+	updatedAt?: Date;
+	firstLoginAt?: Date;
 }
 
 // Function to get all users
-export const getAllUsers = async (): Promise<User[]> => {
+export const getAllGuests = async (): Promise<Guest[]> => {
 	// In a real application, you'd fetch from the database
-	return prisma.user.findMany();
+	return prisma.guest.findMany();
 };
 
-// Function to add a new user
-export const addUser = async (userData: {
-	name: string;
-	email: string;
-}): Promise<User> => {
-	return prisma.user.create({
-		data: userData,
-	});
-};
-
-export const getUserById = async (id: number): Promise<User | null> => {
-	return prisma.user.findUnique({
+export const getGuestById = async (id: number): Promise<Guest | null> => {
+	return prisma.guest.findUnique({
 		where: { id },
 	});
 };
 
-export const updateUser = async (
+export const updateGuest = async (
 	id: number,
 	userData: { name?: string; email?: string }
-): Promise<User> => {
-	return prisma.user.update({
+): Promise<Guest> => {
+	return prisma.guest.update({
 		where: { id },
 		data: userData,
-	});
-};
-
-export const deleteUser = async (id: number): Promise<User> => {
-	return prisma.user.delete({
-		where: { id },
 	});
 };

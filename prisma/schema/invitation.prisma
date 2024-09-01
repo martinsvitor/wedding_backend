@@ -1,0 +1,7 @@
+model Invitation {
+    id              Int       @id @default(autoincrement())
+    invitedGuests   Guest[]   @relation("InvitedGuests")
+    confirmedGuests Guest[]   @relation("ConfirmedGuests")
+    updatedAt       DateTime?
+    firstLoginAt    DateTime?
+}

@@ -1,0 +1,13 @@
+model Guest {
+    id                  Int         @id @default(autoincrement())
+    name                String
+    gender              String
+    willAttend          Boolean? // Nullable, to represent undefined
+    dietaryRestrictions String[]
+    music               String[]
+    invitedBy           Invitation? @relation("InvitedGuests", fields: [invitationId], references: [id])
+    confirmedBy         Invitation? @relation("ConfirmedGuests", fields: [confirmedInvitationId], references: [id])
+
+    invitationId          Int?
+    confirmedInvitationId Int?
+}
