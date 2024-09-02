@@ -1,29 +1,40 @@
 // I will get users from DB in this file
+import prisma from "../prisma/client";
 
-import { todo } from "node:test";
-
-interface User {
+export interface Guest {
 	id: number;
 	name: string;
-	email: string;
+	willAttend: Boolean | null;
+	dietaryRestrictions: String[] | undefined;
+	music: String[] | undefined;
 }
 
-// Testing purposes only, local storing data
-// Replace with actual database
-let users: User[] = [{ id: 1, name: "John Doe", email: "john@example.com" }];
+export interface Invitation {
+	id: number;
+	invitedGuests: Guest[];
+	confirmedGuest: Guest[];
+	updatedAt?: Date;
+	firstLoginAt?: Date;
+}
 
 // Function to get all users
-export const getAllUsers = async (): Promise<User[]> => {
+export const getAllGuests = async (): Promise<Guest[]> => {
 	// In a real application, you'd fetch from the database
-	return users;
+	return prisma.guest.findMany();
 };
 
-// Function to add a new user
-export const addUser = async (userData: Omit<User, "id">): Promise<User> => {
-	const newUser: User = {
-		id: users.length + 1,
-		...userData,
-	};
-	users.push(newUser);
-	return newUser;
+export const getGuestById = async (id: number): Promise<Guest | null> => {
+	return prisma.guest.findUnique({
+		where: { id },
+	});
+};
+
+export const updateGuest = async (
+	id: number,
+	userData: { name?: string; email?: string }
+): Promise<Guest> => {
+	return prisma.guest.update({
+		where: { id },
+		data: userData,
+	});
 };
