@@ -4,7 +4,7 @@ model Guest {
     gender              String
     willAttend          Boolean? // Nullable, to represent undefined
     dietaryRestrictions String[]
-    music               String[]
+    songs               String[]
     invitedBy           Invitation? @relation("InvitedGuests", fields: [invitationId], references: [id])
     confirmedBy         Invitation? @relation("ConfirmedGuests", fields: [confirmedInvitationId], references: [id])
 

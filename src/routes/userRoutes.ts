@@ -1,22 +1,22 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
-	getUsers,
-	getUser,
-	modifyUser,
-} from "../controllers/userController";
+  getAllGuests,
+  getOneGuest,
+  updateSingleGuest,
+} from '@/controllers/userController';
 
 const router = Router();
 
 // GET /api/users
-router.get("/", getUsers);
+router.get('/', getAllGuests);
 
 // GET /api/users/:id
-router.get("/:id", getUser);
+router.get('/:id', getOneGuest);
 
 // POST /api/users
 
 // PUT /api/users/:id
-router.put("/:id", modifyUser);
+router.put('/:id', updateSingleGuest);
 
 // DELETE /api/users/:id
 

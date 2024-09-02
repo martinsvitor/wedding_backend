@@ -1,59 +1,71 @@
-import { Request, Response, NextFunction } from "express";
-import {
-	getAllGuests,
-	getGuestById,
-	updateGuest,
-	Guest,
-  Invitation
-} from "../services/userService";
+import { Request, Response, NextFunction } from 'express';
+import { useGuestServices } from '@/services/guestService';
+import { useTypeGuard } from '@/utils/requestValidation';
+import { Guest } from '@/types/guest';
+
+const {
+  fetchAllGuests,
+  fetchGuestById,
+  fetchAttendingGuests,
+  fetchNotAttendingGuests,
+  updateGuestInfo,
+} = useGuestServices();
+const { isValidUpdateGuestRequest } = useTypeGuard();
 
 // Handler to get all users
-export const getUsers = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+export const getAllGuests = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
-	try {
-		const users: Guest[] = await getAllGuests();
-		res.json(users);
-	} catch (error) {
-		next(error);
-	}
+  try {
+    const guests: Guest[] = await fetchAllGuests();
+    res.json(guests);
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const getUser = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+export const getOneGuest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
-	try {
-		const userId = parseInt(req.params.id, 10);
-		const user: Guest | null = await getGuestById(userId);
-		if (!user) {
-			return res.status(404).json({ message: "User not found." });
-		}
-		res.json(user);
-	} catch (error) {
-		next(error);
-	}
+  try {
+    const guestId = parseInt(req.params.id, 10);
+    const guest: Guest | null = await fetchGuestById(guestId);
+    if (!guest) {
+      return res.status(404).json({ message: 'Guest not found.' });
+    }
+    res.json(guest);
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const modifyUser = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
+export const updateSingleGuest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
-	try {
-		const userId = parseInt(req.params.id, 10);
-		const { name, email } = req.body;
-		const updatedUser: Guest = await updateGuest(userId, { name, email });
-		res.json(updatedUser);
-	} catch (error: any) {
-		if (error.code === "P2002") {
-			return res.status(409).json({
-				message: "Email already exists",
-			});
-		}
-		next(error);
-	}
+  try {
+    if (!isValidUpdateGuestRequest(req.body)) {
+      res.status(400).json({ error: 'Invalid request data' });
+    }
+    const guestId = parseInt(req.params.id, 10);
+    const { willAttend, music, dietaryRestrictions } = req.body;
+    const updatedGuest: Guest = await updateGuestInfo(guestId, {
+      willAttend,
+      music,
+      dietaryRestrictions,
+    });
+    res.json(updatedGuest);
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return res.status(409).json({
+        message: 'Email already exists',
+      });
+    }
+    next(error);
+  }
 };

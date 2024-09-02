@@ -1,6 +1,6 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes';
-import {errorHandler} from './middlewares/errorHandler';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
