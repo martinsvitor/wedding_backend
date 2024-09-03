@@ -3,5 +3,5 @@ export interface Guest {
   name: string;
   willAttend: boolean | null;
   dietaryRestrictions: string[] | undefined;
-  music: string[] | undefined;
+  songs: string[] | undefined;
 }
