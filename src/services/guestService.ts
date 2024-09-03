@@ -37,7 +37,7 @@ export function useGuestServices() {
     });
   }
 
-  // Fetch all songs entered
+  // Fetch all guests with the songs they entered
   async function fetchPreferedSongs(): Promise<SongsResponse[]> {
     return prisma.guest.findMany({
       select: {
@@ -47,6 +47,7 @@ export function useGuestServices() {
     });
   }
 
+  // Fetch all dietary reistrictions
   async function fetchDietaryRestrictions(): Promise<
     DietaryRestrictionsResponse[]
   > {
