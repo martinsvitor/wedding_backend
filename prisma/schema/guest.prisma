@@ -5,9 +5,9 @@ model Guest {
     willAttend          Boolean? // Nullable, to represent undefined
     dietaryRestrictions String[]
     songs               String[]
-    invitedBy           Invitation? @relation("InvitedGuests", fields: [invitationId], references: [id])
+    invitedBy           Invitation @relation("InvitedGuests", fields: [invitationId], references: [id])
     confirmedBy         Invitation? @relation("ConfirmedGuests", fields: [confirmedInvitationId], references: [id])
 
-    invitationId          Int?
+    invitationId          Int
     confirmedInvitationId Int?
 }

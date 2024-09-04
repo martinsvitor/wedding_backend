@@ -67,11 +67,19 @@ export function useGuestServices() {
       dietaryRestrictions?: string[];
     },
   ): Promise<Guest> {
+    const updatedGuestData = {
+      ...guestData,
+      updatedAt: new Date(),
+    };
     return prisma.guest.update({
       where: { id },
-      data: guestData,
+      data: {
+        ...updatedGuestData,
+      },
     });
   }
+
+  // async function
 
   return {
     fetchAllGuests,
