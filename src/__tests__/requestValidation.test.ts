@@ -1,4 +1,4 @@
-import { UpdateGuestRequest } from '@/types/apiRquests';
+import { UpdateGuestRequest } from '@/types/apiRequests';
 import { useTypeGuard } from '@/utils/requestValidation';
 
 describe('isValidUpdateGuestRequest', () => {

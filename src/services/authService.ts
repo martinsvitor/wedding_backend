@@ -3,15 +3,18 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vitaliswedding';
 
-export const authenticateGuest = async (name: string) => {
+export const findGuestByName = async (name: string) => {
   const guest = await prisma.guest.findFirst({
+    omit:{
+        gender:true,
+    },
     where: {
       name: {
         equals: name,
         mode: 'insensitive',
       },
-    },
-  });
+    }
+});
 
   if (!guest) {
     return null;
