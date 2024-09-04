@@ -1,22 +1,34 @@
 import jwt from 'jsonwebtoken';
-import {Request, Response, NextFunction} from 'express';
-import { Guest } from '@/types/guest';
+import { Request, Response, NextFunction } from 'express';
+import { GuestResponse } from '@/types/express';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vitaliswedding';
 
-export const verifyToken = (req: Request, res:Response, next: NextFunction) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+export const authenticateJWT = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.path === '/login') {
+    return next();
+  }
 
-    if(!token) {
-        return res.status(403).json({message: 'No Token provided'});
-    }
+  const token = req.header('Authorization')?.split(' ')[1];
 
-    jwt.verify(token, JWT_SECRET, (error, decoded) => {
-        if(error) {
-            return res.status(401).json({message: 'Failed to authenticate token'})
-        }
+  if (!token) {
+    return res.status(403).json({
+      message: 'Access denied. No token provided',
+    });
+  }
 
-        req.guest = decoded as Guest;
-        next();
-    })
-}
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as GuestResponse;
+    req.token = token;
+    req.guest = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      message: 'Invalid token.',
+    });
+  }
+};

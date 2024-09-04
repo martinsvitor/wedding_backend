@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UpdateGuestRequest } from '@/types/apiRquests';
+import { UpdateGuestRequest } from '@/types/apiRequests';
 
 export function useTypeGuard() {
   // Checks if updateGuestInfo is called with correct type data
