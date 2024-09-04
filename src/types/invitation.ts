@@ -4,6 +4,6 @@ export interface Invitation {
   id: number;
   invitedGuests: Guest[];
   confirmedGuests: Guest[];
-  updatedAt?: Date;
-  firstLoginAt?: Date;
+  updatedAt?: Date | null;
+  firstLoginAt?: Date | null;
 }

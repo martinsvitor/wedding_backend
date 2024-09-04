@@ -3,7 +3,7 @@ import {
   getAllGuests,
   getOneGuest,
   updateSingleGuest,
-} from '@/controllers/userController';
+} from '@/controllers/guestController';
 
 const router = Router();
 
