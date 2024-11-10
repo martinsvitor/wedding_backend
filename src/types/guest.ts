@@ -4,4 +4,6 @@ export interface Guest {
   willAttend: boolean | null;
   dietaryRestrictions: string[] | undefined;
   songs: string[] | undefined;
+  invitationId: number;
+  confirmedInvitationId: number | null;
 }

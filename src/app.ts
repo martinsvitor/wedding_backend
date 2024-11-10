@@ -1,6 +1,6 @@
 import express from 'express';
 import authRouthes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
+import guestRoutes from './routes/guestRoutes';
 import basicRoutes from '@/routes/basicRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -12,7 +12,7 @@ app.use(express.json());
 // Routes
 app.use('/', basicRoutes);
 app.use('/api/auth', authRouthes);
-app.use('/api/users', userRoutes);
+app.use('/api/guests', guestRoutes);
 
 // Error Handling Middleware
 app.use(errorHandler);

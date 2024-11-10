@@ -27,7 +27,6 @@ async function main() {
 			},
 		},
 	});
-	console.log({ invitation });
 
 	const updatedLoggedInGuest = await prisma.invitation.update({
 		where:{
@@ -42,8 +41,6 @@ async function main() {
 			firstLoginAt: new Date()
 		}
 	})
-
-	console.log(updatedLoggedInGuest);
 }
 
 main()

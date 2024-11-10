@@ -1,10 +1,6 @@
 import { Invitation } from '@/types/invitation';
-import { Guest } from '@/types/guest';
 import prisma from '@/lib/prisma';
-import {
-  InvitedGuestsResponse,
-  ConfirmedGuestsResponse,
-} from '@/types/apiResponses';
+import { InvitedGuestsResponse } from '@/types/apiResponses';
 
 export function useInvitationService() {
   async function fetchInvitedGuests(): Promise<InvitedGuestsResponse[]> {
@@ -15,7 +11,7 @@ export function useInvitationService() {
     });
   }
 
-  async function fetchConfirmedGuests(): Promise<ConfirmedGuestsResponse[]> {
+  async function fetchConfirmedGuests(): Promise<any[]> {
     return prisma.invitation.findMany({
       select: {
         confirmedGuests: true,
@@ -26,7 +22,7 @@ export function useInvitationService() {
   async function updateInivitationOnLogin(
     invitationId: number,
     guestId: number,
-  ) : Promise<Invitation> {
+  ): Promise<Invitation> {
     return prisma.invitation.update({
       where: {
         id: invitationId,
@@ -37,16 +33,16 @@ export function useInvitationService() {
       data: {
         firstLoginAt: new Date(),
       },
-      include:{
+      include: {
         invitedGuests: true,
-        confirmedGuests: true
-      }
+        confirmedGuests: true,
+      },
     });
   }
 
   return {
     fetchInvitedGuests,
     fetchConfirmedGuests,
-    updateInivitationOnLogin
+    updateInivitationOnLogin,
   };
 }

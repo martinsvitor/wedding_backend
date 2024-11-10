@@ -9,13 +9,14 @@ import { Guest } from '@/types/guest';
 export function useGuestServices() {
   // Function to find all users
   async function fetchAllGuests(): Promise<Guest[]> {
-    return prisma.guest.findMany();
+    return prisma.guest.findMany({ omit: { gender: true } });
   }
 
   // Find single guest
   async function fetchGuestById(id: number): Promise<Guest | null> {
     return prisma.guest.findUnique({
       where: { id },
+      omit: { gender: true },
     });
   }
 
@@ -69,14 +70,24 @@ export function useGuestServices() {
   ): Promise<Guest> {
     const updatedGuestData = {
       ...guestData,
-      updatedAt: new Date(),
     };
-    return prisma.guest.update({
+    const updatedGuest = prisma.guest.update({
       where: { id },
       data: {
         ...updatedGuestData,
       },
     });
+
+    await prisma.invitation.update({
+      where: { 
+        id: (await updatedGuest).invitationId
+      },
+      data: {
+        updatedAt: new Date(),
+      },
+    });
+
+    return updatedGuest;
   }
 
   // async function

@@ -1,3 +1,4 @@
+import { ManyGuestsResponse } from '@/types/apiResponses';
 import { Request, Response, NextFunction } from 'express';
 import { useGuestServices } from '@/services/guestService';
 import { useTypeGuard } from '@/utils/requestValidation';
@@ -10,7 +11,7 @@ const {
   fetchNotAttendingGuests,
   updateGuestInfo,
 } = useGuestServices();
-const { isValidUpdateGuestRequest } = useTypeGuard();
+const { isValidUpdateGuestRequest, validateEventData } = useTypeGuard();
 
 // Handler to get all users
 export const getAllGuests = async (
@@ -22,6 +23,35 @@ export const getAllGuests = async (
     const guests: Guest[] = await fetchAllGuests();
     res.json(guests);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllConfirmedGuests = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const confirmedGuestsResponse: ManyGuestsResponse =
+      await fetchAttendingGuests();
+    res.status(200).json(confirmedGuestsResponse);
+  } catch (error) {
+    console.log('Catch Block for confirmedGuests. Error: ', error);
+    next(error);
+  }
+};
+
+export const getAllNonAttendingGuests = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const response: ManyGuestsResponse = await fetchNotAttendingGuests();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log('Catch Block for confirmedGuests. Error: ', error);
     next(error);
   }
 };
@@ -49,7 +79,7 @@ export const updateSingleGuest = async (
   next: NextFunction,
 ) => {
   try {
-    if (!isValidUpdateGuestRequest(req.body)) {
+    if (!validateEventData(req.body)) {
       res.status(400).json({ error: 'Invalid request data' });
     }
     const guestId = parseInt(req.params.id, 10);
@@ -59,7 +89,7 @@ export const updateSingleGuest = async (
       music,
       dietaryRestrictions,
     });
-    res.json(updatedGuest);
+    res.status(200).json(updatedGuest);
   } catch (error: any) {
     if (error.code === 'P2002') {
       return res.status(409).json({

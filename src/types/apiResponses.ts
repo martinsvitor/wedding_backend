@@ -1,8 +1,7 @@
 import { Guest } from './guest';
 
-export interface ConfirmedGuestsResponse {
-  confirmedGuests: Guest[];
-}
+export type ManyGuestsResponse = Guest[];
+
 export interface InvitedGuestsResponse {
   invitedGuests: Guest[];
 }
